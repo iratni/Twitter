@@ -53,7 +53,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableCell" rowHeight="171" id="yU3-Qd-MbT" customClass="TweetsTableViewCell" customModule="Twitter" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TweetsTableViewCell" rowHeight="171" id="yU3-Qd-MbT" customClass="TweetsTableViewCell" customModule="Twitter" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="320" height="171"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yU3-Qd-MbT" id="klf-qd-FQT">
@@ -86,32 +86,45 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tweet Body" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GsN-fi-dcR" userLabel="CurrentTweetLabel">
-                                                    <rect key="frame" x="57" y="34" width="63" height="14"/>
+                                                    <rect key="frame" x="57" y="38" width="63" height="10"/>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3X4-sU-Emb">
-                                                    <rect key="frame" x="219" y="69" width="16" height="18"/>
+                                                    <rect key="frame" x="219" y="68.5" width="16" height="18"/>
                                                     <state key="normal" backgroundImage="Like"/>
+                                                    <connections>
+                                                        <action selector="WhenLike:" destination="yU3-Qd-MbT" eventType="touchUpInside" id="vQC-5m-s3j"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Prg-SA-NZu">
-                                                    <rect key="frame" x="85" y="69" width="16" height="18"/>
+                                                    <rect key="frame" x="85" y="68" width="16" height="18"/>
                                                     <state key="normal" backgroundImage="Reply"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yw2-Ha-fXA">
-                                                    <rect key="frame" x="152" y="69" width="16" height="18"/>
+                                                    <rect key="frame" x="152" y="68" width="16" height="18"/>
                                                     <state key="normal" backgroundImage="Retweet"/>
+                                                    <connections>
+                                                        <action selector="WhenRetweeting:" destination="yU3-Qd-MbT" eventType="touchUpInside" id="Wi9-Vm-VFZ"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVm-Nk-Qhv" userLabel="CountRetweetingLabel">
                                                     <rect key="frame" x="171" y="71" width="14" height="15"/>
                                                     <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mlh-c3-BUf">
+                                                    <rect key="frame" x="238" y="71" width="13.5" height="13.5"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ybN-cx-dUQ" firstAttribute="top" secondItem="klf-qd-FQT" secondAttribute="top" constant="15" id="5Mn-aw-fDB"/>
+                                                <constraint firstItem="Mlh-c3-BUf" firstAttribute="centerY" secondItem="3X4-sU-Emb" secondAttribute="centerY" id="6AP-st-qN6"/>
                                                 <constraint firstItem="yw2-Ha-fXA" firstAttribute="leading" secondItem="Prg-SA-NZu" secondAttribute="trailing" constant="51" id="7oF-IC-Gwm"/>
                                                 <constraint firstItem="GsN-fi-dcR" firstAttribute="leading" secondItem="i1K-3A-q0K" secondAttribute="trailing" constant="5" id="8a9-TO-xBA"/>
                                                 <constraint firstItem="TVm-Nk-Qhv" firstAttribute="leading" secondItem="yw2-Ha-fXA" secondAttribute="trailing" constant="3" id="9Tw-gF-ozf"/>
@@ -130,13 +143,16 @@
                                                 <constraint firstItem="Prg-SA-NZu" firstAttribute="leading" secondItem="klf-qd-FQT" secondAttribute="leadingMargin" constant="77" id="aFL-Cp-OYi"/>
                                                 <constraint firstItem="39p-tV-aRF" firstAttribute="top" secondItem="klf-qd-FQT" secondAttribute="top" constant="16" id="cVu-ka-wWH"/>
                                                 <constraint firstItem="i1K-3A-q0K" firstAttribute="top" secondItem="klf-qd-FQT" secondAttribute="top" constant="15" id="dV0-Nc-Guo"/>
+                                                <constraint firstItem="Mlh-c3-BUf" firstAttribute="leading" secondItem="3X4-sU-Emb" secondAttribute="trailing" constant="3" id="fdH-CX-Ai9"/>
                                                 <constraint firstItem="QZW-hU-Y1n" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="39p-tV-aRF" secondAttribute="trailing" constant="5" id="pxm-RE-s1V"/>
                                                 <constraint firstItem="QZW-hU-Y1n" firstAttribute="top" secondItem="klf-qd-FQT" secondAttribute="top" constant="15" id="tYH-ba-P4v"/>
                                                 <constraint firstItem="3X4-sU-Emb" firstAttribute="leading" secondItem="yw2-Ha-fXA" secondAttribute="trailing" constant="51" id="z4T-h8-lRo"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="CurrentTweetLabel" destination="GsN-fi-dcR" id="s5H-nW-9ga"/>
+                                            <outlet property="CountLikesLabel" destination="Mlh-c3-BUf" id="W5K-6E-vx5"/>
+                                            <outlet property="CountRetweetingLabel" destination="TVm-Nk-Qhv" id="Lco-yB-MSw"/>
+                                            <outlet property="CurrentTweetLabel" destination="GsN-fi-dcR" id="Vez-VG-cV1"/>
                                             <outlet property="LikeButton" destination="3X4-sU-Emb" id="IDI-Oa-O7A"/>
                                             <outlet property="Picture" destination="i1K-3A-q0K" id="RgW-2F-pLg"/>
                                             <outlet property="ReplyButton" destination="Prg-SA-NZu" id="f0p-I0-H8n"/>

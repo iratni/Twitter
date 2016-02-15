@@ -22,13 +22,12 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150
+        // Do any additional setup after loading the view.
         
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
             self.tweets = tweets
             self.tableView.reloadData()
-            
-            
         }
     }
 
@@ -41,7 +40,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     @IBAction func onLogout(sender: AnyObject) {
         User.currentUser!.logout()
         self.dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
     
@@ -53,16 +51,9 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath) as! TweetsTableViewCell
-        
-        cell.Picture.setImageWithURL(NSURL(string: tweets![indexPath.row].user!.profileImageUrl!)!)
-        cell.UserNameLabel.text = tweets![indexPath.row].user!.name!
-        cell.TweeterNameLabel.text = tweets![indexPath.row].user!.screenname!
-        cell.CurrentTweetLabel.text = tweets![indexPath.row].text!
+        let cell = tableView.dequeueReusableCellWithIdentifier("TweetsTableViewCell", forIndexPath: indexPath) as! TweetsTableViewCell
+        cell.tweet = tweets![indexPath.row]
         cell.TimesTampLabel.text = tweets![indexPath.row].Time!
-        
-        cell.CurrentTweetLabel.sizeToFit()
-        
         return cell
     }
     

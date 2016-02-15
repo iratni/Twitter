@@ -9,6 +9,7 @@
 
 import UIKit
 import BDBOAuth1Manager
+import AFNetworking
 
 let twitterConsumerKey = "5qtq9cPEQro5QgrLEcy4qsfX8"
 let twitterConsumerSecret = "YvpQSp8gMn1QQpWhsfaoPd9xbqwudQP5KMBOxDgrTVBvuXoqWI"
@@ -45,12 +46,29 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     
+    func retweet(id: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
+        POST("1.1/statuses/retweet/\(id).json", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            completion(error: nil)
+            }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
+                completion(error: error)
+            }
+        )
+    }
+    
+    
+    
+    func likeTweet(id: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
+        POST("1.1/favorites/create.json?id=\(id)", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            completion(error: nil)
+            }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
+                completion(error: error)
+            }
+        )}
+    
+    
     func loginWithCompletion(completion: (user: User?, error: NSError?) -> ()) {
-        
         loginWithCompletion = completion
-        
         TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
-        
         TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "cptwitterdemo://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
             print("Got the request token")
             let authURL = NSURL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token)")
@@ -62,11 +80,9 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func openURL(url: NSURL){
-        
         TwitterClient.sharedInstance.fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: BDBOAuth1Credential(queryString: url.query)!, success: { (accessToken: BDBOAuth1Credential!) -> Void in
             print("Got the access token!")
             TwitterClient.sharedInstance.requestSerializer.saveAccessToken(accessToken)
-            
             TwitterClient.sharedInstance.GET("1.1/account/verify_credentials.json", parameters: nil, success: { (operation: NSURLSessionDataTask!, response: AnyObject) -> Void in
                 let user = User(dictionary: response as! NSDictionary)
                 User.currentUser = user
