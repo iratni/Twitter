@@ -56,6 +56,15 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     
+    func undoretweet(retweetedTweetID: Int, params: NSDictionary?, completion: (error: NSError?) -> ()) {
+        POST("/1.1/statuses/destroy/\(retweetedTweetID).json", parameters: params, success: { (operation: NSURLSessionDataTask, response: AnyObject?) -> Void in
+            completion(error: nil)
+            }, failure: { (operation: NSURLSessionDataTask?, err: NSError!) -> Void in
+                completion(error: err)
+        })
+    }
+    
+    
     
     func likeTweet(id: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
         POST("1.1/favorites/create.json?id=\(id)", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
