@@ -15,6 +15,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     var isMoreDataLoading = false
     var loadingMoreView:InfiniteScrollActivityView?
     var refreshControl = UIRefreshControl()
+    var loadMoreOffset = 50
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,9 +26,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150
-        // Do any additional setup after loading the view.
-        
-        
+                
         
         self.refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction", forControlEvents: UIControlEvents.ValueChanged)
@@ -48,7 +47,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.contentInset = insets
         
         
-        tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
             if (tweets != nil) {
             self.tweets = tweets
@@ -64,8 +63,17 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     @IBAction func onLogout(sender: AnyObject) {
-        User.currentUser!.logout()
+        if User.currentUser != nil{
+            User.currentUser!.logout()
+        } else{
+            print("current user is nil")
+        }
+        
+      //  User.currentUser!.logout()
+        
+        
         self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     
@@ -92,38 +100,36 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
            self.refreshControl.endRefreshing()
         }
     }
-    
+    func delay(delay: Double, closure: () -> () ) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure
+        )
+    }
     
     func loadMoreData() {
-        
-        let url = NSURL(string:"https://api.twitter.com")
-        let myRequest = NSURLRequest(URL: url!)
-        let session = NSURLSession(
-            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
-            delegate:nil,
-            delegateQueue:NSOperationQueue.mainQueue()
-        )
-        
-        let task : NSURLSessionDataTask = session.dataTaskWithRequest(myRequest,
-            completionHandler: { (data, response, error) in
-                
-                // Stop the loading indicator
-                self.loadingMoreView!.stopAnimating()
-                
-                if (self.tweets! != []) {
-                    for Tweet in self.tweets! {
-                        self.tweets?.append(Tweet)
-                    }
-                    self.tweets? = self.tweets!
+        TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
+            
+            if error != nil {
+                self.delay(1.0, closure: {
+                    self.loadingMoreView?.stopAnimating()
+                    //TODO: show network error
+                })
+            } else {
+                self.delay(5.0, closure: { Void in
+                    self.loadMoreOffset += 50
+                    self.tweets!.appendContentsOf(tweets!)
                     self.tableView.reloadData()
-                }
-              
-                
-                // Update flag
-                self.isMoreDataLoading = false
-                
-        });
-        task.resume()
+                    self.loadingMoreView?.stopAnimating()
+                    self.isMoreDataLoading = false
+                })
+            }
+            
+        }
+        
     }
     
     
@@ -157,6 +163,18 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         insets.bottom += InfiniteScrollActivityView.defaultHeight
         tableView.contentInset = insets
     }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let tweet = tweets![indexPath!.row]
+        
+        let tweetsDetailsViewController = segue.destinationViewController as! TweetsDetailsViewController
+        tweetsDetailsViewController.tweet = tweet
+        
+    }
+    
     
     
 }
