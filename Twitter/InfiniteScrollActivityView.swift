@@ -3,7 +3,7 @@
 //  Twitter
 //
 //  Created by Youcef Iratni on 2/20/16.
-//  Copyright © 2016 Tejen. All rights reserved.
+//  Copyright © 2016 Youcef Iratni. All rights reserved.
 //
 
 import UIKit

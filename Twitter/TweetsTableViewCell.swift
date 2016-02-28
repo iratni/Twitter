@@ -22,6 +22,11 @@ class TweetsTableViewCell: UITableViewCell {
     @IBOutlet weak var LikeButton: UIButton!
     @IBOutlet weak var CountRetweetingLabel: UILabel!
     @IBOutlet weak var CountLikesLabel: UILabel!
+    
+    
+    
+    
+    
     var tweetID: String = ""
     var  isRetweetButton: Bool = false
     var islikeButton: Bool = false

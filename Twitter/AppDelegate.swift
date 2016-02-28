@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         if User.currentUser != nil {
             print("Current user detected: \(User.currentUser?.name)")
-            let vc = storyboard.instantiateViewControllerWithIdentifier("MyNavigationController") as UIViewController
+            let vc = storyboard.instantiateViewControllerWithIdentifier("TabBarController") as! UITabBarController
             window?.rootViewController = vc
             
         } else {

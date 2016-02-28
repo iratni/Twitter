@@ -12,6 +12,7 @@ import UIKit
 class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
 
     var tweets: [Tweet]?
+    var tweet: Tweet?
     var isMoreDataLoading = false
     var loadingMoreView:InfiniteScrollActivityView?
     var refreshControl = UIRefreshControl()
@@ -54,8 +55,24 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.reloadData()
             }
         }
+        
     }
 
+    override func viewWillAppear(animated: Bool) {
+        let nav = self.navigationController?.navigationBar
+        nav?.barTintColor = UIColor.grayColor()
+        nav?.tintColor = UIColor.blueColor()
+        
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        imageView.contentMode = .ScaleAspectFit
+        
+        let image = UIImage(named: "Compose")
+        imageView.image = image
+        imageView.tintColor = UIColor.blackColor()
+        
+       // navigationItem.titleView = imageView
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -164,15 +181,43 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.contentInset = insets
     }
     
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPathForCell(cell)
-        let tweet = tweets![indexPath!.row]
         
-        let tweetsDetailsViewController = segue.destinationViewController as! TweetsDetailsViewController
-        tweetsDetailsViewController.tweet = tweet
-        
+        if (segue.identifier == "Details") {
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPathForCell(cell)
+            let tweet = tweets![indexPath!.row]
+            let tweetsDetailsViewController = segue.destinationViewController as! TweetsDetailsViewController
+            tweetsDetailsViewController.tweet = tweet
+            
+        }
+        else if (segue.identifier) == "Compose" {
+            let user = User.currentUser
+            let composeTweetViewController = segue.destinationViewController as! ComposeViewController
+            composeTweetViewController.user = user
+            
+            
+        } else if (segue.identifier) == "ReplyFromCellSegue" {
+            let button = sender as! UIButton
+            let view = button.superview!
+            let cell = view.superview as! TweetsTableViewCell
+            let indexPath = tableView.indexPathForCell(cell)
+            let tweet = tweets![indexPath!.row]
+            let user = User.currentUser
+            let ReplyTweetViewController = segue.destinationViewController as! ReplyViewController
+            ReplyTweetViewController.tweet = tweet
+            ReplyTweetViewController.user = user
+            
+            
+        } else if (segue.identifier) == "FromCellToUserProfileSegue"{
+            let button = sender as! UIButton
+            let view = button.superview!
+            let cell = view.superview as! TweetsTableViewCell
+            let indexPath = tableView.indexPathForCell(cell)
+            let tweet = tweets![indexPath!.row]
+            let UserProfilePageViewController = segue.destinationViewController as! UserProfileViewController
+            UserProfilePageViewController.tweet = tweet
+        }
     }
     
     

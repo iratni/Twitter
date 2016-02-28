@@ -106,4 +106,28 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
+    
+    func ComposeTweet(escapedTweet: String, params: NSDictionary?, completion: (error: NSError?) -> () ){
+        POST("1.1/statuses/update.json?status=\(escapedTweet)", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("tweeted: \(escapedTweet)")
+            completion(error: nil)
+            }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
+                print("Couldn't compose")
+                completion(error: error)
+            }
+        )
+    }
+    
+    
+    func ReplyToTweet(escapedTweet: String, statusID: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
+        POST("1.1/statuses/update.json?in_reply_to_status_id=\(statusID)&status=\(escapedTweet)", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("tweeted: \(escapedTweet)")
+            completion(error: nil)
+            }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
+                print("Couldn't reply")
+                completion(error: error)
+            }
+        )
+    }
+    
 }
